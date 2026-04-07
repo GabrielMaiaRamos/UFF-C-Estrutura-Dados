@@ -152,6 +152,7 @@ TNoA *insere(TNoA *node, int key)
     return node;
 }
 
+
 TNoA *arvore_balanceada(TNoA *raiz, int v[], int inicio, int fim)
 {
     // se o inicio ainda nao estiver passado do fim, ainda precisa fazer
