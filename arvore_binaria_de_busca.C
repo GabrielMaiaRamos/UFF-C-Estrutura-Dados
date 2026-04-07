@@ -152,6 +152,43 @@ TNoA *insere(TNoA *node, int key)
     return node;
 }
 
+TNoA *exclusao(TNoA *node, int key)
+{
+    if (node == NULL)
+        return NULL;
+    // procura o nó pra excluir (interativo)
+    while (node != NULL)
+    {
+        if (node->key == key)
+            break;
+        else if (node->key < key)
+            node = node->dir;
+        else
+            node = node->esq;
+    }
+    if (node == NULL)
+        return NULL;
+    printf("Achei o no: %d\n", node->key);
+
+    if (node->dir != NULL && node->esq != NULL)
+    {
+        TNoA *maior = node->esq; // maior da esquerda
+        while (maior->dir != NULL)
+            maior = maior->dir;
+        node->key = maior->key;                      // copia apenas a key
+        node->esq = exclusao(node->esq, maior->key); // exclui o original
+    }
+    else
+    {
+        TNoA *temp = node;
+        if (node->dir != NULL)
+            node = node->dir;
+        else
+            node = node->esq; // else vale tanto pra quando pega da esq, quanto pra NULL
+        free(temp);
+    }
+    return node;
+}
 
 TNoA *arvore_balanceada(TNoA *raiz, int v[], int inicio, int fim)
 {
@@ -199,14 +236,15 @@ TNoA *maior(TNoA *no)
 
 int main()
 {
-    int v[7] = {1111, 2, 10, 4, 8, 6, 7};
+    int v[6] = {10, 20, 30, 40, 35, 50};
     TNoA *raiz = NULL;
 
     raiz = arvore_balanceada(raiz, v, 0, 6);
     print_tree(raiz, 0);
     printf("\n\n\n");
-    pos_ordem_iterativa(raiz);
-    printf("\nMaior: %d", maior(raiz)->key);
+    exclusao(raiz, 35);
+    printf("\n\n\n");
+    print_tree(raiz, 0);
     getchar();
     getchar();
     return 0;
