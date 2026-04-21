@@ -27,6 +27,8 @@ int ehZigueZague(TNoA *raiz)
     return 0;
 }
 
+
+
 int main()
 {
     getchar();
