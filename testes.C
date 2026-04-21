@@ -2,21 +2,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct vizinho {
+typedef struct vizinho
+{
     int id_vizinho;
     int peso;
     struct vizinho *prox;
-}TVizinho;
+} TVizinho;
 
-typedef struct grafo{
+typedef struct grafo
+{
     int id_vertice;
     int cor;
     TVizinho *prim_vizinho;
     struct grafo *prox;
-}TGrafo;
+} TGrafo;
 
-TGrafo *insere_vertice(TGrafo *g, int id) {
-    TGrafo *vertice = (TGrafo *) malloc(sizeof(TGrafo));
+TGrafo *insere_vertice(TGrafo *g, int id)
+{
+    TGrafo *vertice = (TGrafo *)malloc(sizeof(TGrafo));
     vertice->id_vertice = id;
     vertice->cor = -1;
     vertice->prox = g;
@@ -24,50 +27,62 @@ TGrafo *insere_vertice(TGrafo *g, int id) {
     return vertice;
 }
 
-void libera_vizinho(TVizinho *vizinho) {
-    if (vizinho != NULL) {
+void libera_vizinho(TVizinho *vizinho)
+{
+    if (vizinho != NULL)
+    {
         libera_vizinho(vizinho->prox);
         free(vizinho);
     }
 }
 
-void libera_vertice(TGrafo *vertice) {
-    if (vertice != NULL) {
+void libera_vertice(TGrafo *vertice)
+{
+    if (vertice != NULL)
+    {
         libera_vizinho(vertice->prim_vizinho);
         libera_vertice(vertice->prox);
         free(vertice);
     }
 }
 
-TGrafo *busca_vertice(TGrafo *vertice, int id) {
-    while ((vertice != NULL) && (vertice->id_vertice != id)) {
+TGrafo *busca_vertice(TGrafo *vertice, int id)
+{
+    while ((vertice != NULL) && (vertice->id_vertice != id))
+    {
         vertice = vertice->prox;
     }
     return vertice;
 }
 
-TVizinho *busca_vizinho(TVizinho *vizinho, int id) {
-    while ((vizinho != NULL) && (vizinho->id_vizinho != id)) {
+TVizinho *busca_vizinho(TVizinho *vizinho, int id)
+{
+    while ((vizinho != NULL) && (vizinho->id_vizinho != id))
+    {
         vizinho = vizinho->prox;
     }
     return vizinho;
 }
 
-void insere_aresta(TGrafo *g, int origem, int destino, int peso) {
+void insere_aresta(TGrafo *g, int origem, int destino, int peso)
+{
     TGrafo *vertice = busca_vertice(g, origem);
-    TVizinho *vizinho = (TVizinho *) malloc(sizeof(TVizinho));
+    TVizinho *vizinho = (TVizinho *)malloc(sizeof(TVizinho));
     vizinho->id_vizinho = destino;
     vizinho->peso = peso;
     vizinho->prox = vertice->prim_vizinho;
     vertice->prim_vizinho = vizinho;
 }
 
-void imprime(TGrafo *vertice) {
-    while (vertice != NULL) {
+void imprime(TGrafo *vertice)
+{
+    while (vertice != NULL)
+    {
         printf("Vertice: %d\n", vertice->id_vertice);
         printf("Vizinhos: ");
         TVizinho *vizinho = vertice->prim_vizinho;
-        while (vizinho != NULL) {
+        while (vizinho != NULL)
+        {
             printf("%d ", vizinho->id_vizinho);
             vizinho = vizinho->prox;
         }
@@ -76,16 +91,35 @@ void imprime(TGrafo *vertice) {
     }
 }
 
-int ehNaoOrientado(TGrafo *g) {
-    //TODO: Implementar essa função
-    return -1;
+int ehNaoOrientado(TGrafo *g)
+{
+    TGrafo *v1 = g, *v2 = NULL;
+    while (v1 != NULL)
+    {
+        TVizinho *v1Viz = v1->prim_vizinho;
+        while (v1Viz != NULL) // enquanto houverem arestas, roda
+        {
+            v2 = busca_vertice(g, v1Viz->id_vizinho); // encontra o vertice original desse vizinho
+            TVizinho *v2Viz = busca_vizinho(v2->prim_vizinho, v1->id_vertice);
+
+            if (v2Viz == NULL) // se NEM encontrar a aresta, nao eh ordenado
+                return 0;
+            if (v1Viz->peso != v2Viz->peso) // se os pesos forem diferentes, nao eh ordenado
+                return 0;
+            // se nao forem os casos, esta correto e passa pro proximo
+            v1Viz = v1Viz->prox;
+        }
+        v1 = v1->prox;
+    }
+    return 1;
 }
 
-int main() {
+int main()
+{
     /* A função main lê os dados de entrada, cria o grafo e chama a função solicitada no problema
-    * depois imprime o resultado
-    * ELA NÃO DEVE SER MODIFICADA
-    * */
+     * depois imprime o resultado
+     * ELA NÃO DEVE SER MODIFICADA
+     * */
     int num_vertices, num_arestas;
     int id;
     int origem, destino, peso;
@@ -95,21 +129,23 @@ int main() {
     int i;
     TGrafo *g = NULL;
 
-    //le numero de vertices
+    // le numero de vertices
     scanf("%d", &num_vertices);
-    //le e cria os vertices
-    for (i = 0; i < num_vertices; i++) {
+    // le e cria os vertices
+    for (i = 0; i < num_vertices; i++)
+    {
         scanf("%s", l);
         id = atoi(l);
         g = insere_vertice(g, id);
     }
 
-    //Le numero de arestas e depois le os dados de cada aresta
-    //Cria as arestas no grafo
+    // Le numero de arestas e depois le os dados de cada aresta
+    // Cria as arestas no grafo
     scanf("%d", &num_arestas);
-    for (i = 0; i < num_arestas; i++) {
+    for (i = 0; i < num_arestas; i++)
+    {
         scanf("%s", l);
-        //quebra a string de entrada
+        // quebra a string de entrada
         ptr = strtok(l, delimitador);
         origem = atoi(ptr);
         ptr = strtok(NULL, delimitador);
@@ -119,11 +155,11 @@ int main() {
         insere_aresta(g, origem, destino, peso);
     }
 
-    //imprime(g);
-
+    // imprime(g);
+    printf("oii\n");
     printf("%d", ehNaoOrientado(g));
     libera_vertice(g);
-    
+
     getchar();
     getchar();
 }
