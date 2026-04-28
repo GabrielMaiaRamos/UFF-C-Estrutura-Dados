@@ -19,3 +19,18 @@ TAB *copia(TAB *a)
     novo->esq = copia(a->esq);
     return novo;
 }
+
+/*Escreva uma função em C que faz o espelho de uma árvore (o que está a esquerda
+na árvore original, estará a direita no espelho, e vice-versa) */
+TAB *espelho(TAB *a)
+{
+    if (a == NULL)
+        return NULL;
+
+    TAB *temp = a->esq;
+    a->esq = a->dir;
+    a->dir = temp;
+
+    espelho(a->dir);
+    espelho(a->esq);
+}
