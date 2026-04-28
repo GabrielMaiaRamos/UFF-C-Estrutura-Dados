@@ -13,9 +13,9 @@ TAB *copia(TAB *a)
     if (a == NULL) // se for null, acabou essa linha
         return NULL;
 
-    TAB *novo = malloc(sizeof(TAB));
+    TAB *novo = malloc(sizeof(TAB)); // aloca espaco na memoria e preenche o novo no
     novo->info = a->info;
-    novo->dir = copia(a->dir);
+    novo->dir = copia(a->dir); // preenche a direita e a esquerda recursivamente
     novo->esq = copia(a->esq);
     return novo;
 }
