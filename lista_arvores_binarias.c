@@ -34,3 +34,22 @@ TAB *espelho(TAB *a)
     espelho(a->dir);
     espelho(a->esq);
 }
+
+// Escreva uma função em C que retorna o maior elemento da árvore
+TAB *encontrar_maior(TAB *a)
+{
+    if (a == NULL)
+        return NULL;
+
+    TAB *maior_no = a;
+
+    TAB *m_esq = encontrar_maior(a->esq); // acha os maiores da esq e direita
+    TAB *m_dir = encontrar_maior(a->dir);
+
+    if (m_dir != NULL && m_dir > maior_no) // faz as comparacoes com a raiz
+        maior_no = m_dir;
+    if (m_esq != NULL && m_esq > maior_no)
+        maior_no = m_esq;
+
+    return maior_no;
+}
