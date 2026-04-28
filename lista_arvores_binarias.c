@@ -70,3 +70,21 @@ TAB *encontrar_menor(TAB *a)
 
     return menor_no;
 }
+
+/* Escreva uma função em C que, dadas duas árvores deste tipo, testa se estas árvores
+são iguais. A função retorna um se elas são iguais e zero, caso contrário. A função
+deve obedecer ao seguinte protótipo: int igual (TAB* a1, TAB* a2) */
+
+int *igual(TAB *a1, TAB *a2)
+{
+    if (a1 == NULL && a2 == NULL) // se ambos forem null, eh igual (retorna 1)
+        return 1;
+    if (a1 != NULL || a2 != NULL) // se apenas UM for null, eh diferente (retorna 0)
+        return 0;
+    if (a1->info != a2->info) // se a info eh diferente, retorna 0
+        return 0;
+
+    // quando os dois forem iguais, retorna a verificacao pra cada lado, junto com um
+    //  "AND" para verificar se ambos os lados sao iguais
+    return igual(a1->dir, a2->dir) && igual(a1->esq, a2->esq);
+}
