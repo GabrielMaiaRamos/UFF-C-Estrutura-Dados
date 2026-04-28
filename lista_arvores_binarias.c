@@ -46,10 +46,27 @@ TAB *encontrar_maior(TAB *a)
     TAB *m_esq = encontrar_maior(a->esq); // acha os maiores da esq e direita
     TAB *m_dir = encontrar_maior(a->dir);
 
-    if (m_dir != NULL && m_dir > maior_no) // faz as comparacoes com a raiz
+    if (m_dir != NULL && m_dir->info > maior_no->info) // faz as comparacoes com a raiz
         maior_no = m_dir;
-    if (m_esq != NULL && m_esq > maior_no)
+    if (m_esq != NULL && m_esq->info > maior_no->info)
         maior_no = m_esq;
 
     return maior_no;
+}
+
+// Escreva uma função em C que retorna o menor elemento da árvore
+TAB *encontrar_menor(TAB *a)
+{
+    if (a == NULL)
+        return NULL;
+    TAB *menor_no = a;
+    TAB *m_esq = encontrar_menor(a->esq);
+    TAB *m_dir = encontrar_menor(a->dir);
+
+    if (m_esq != NULL && m_esq->info < menor_no->info)
+        menor_no = m_esq;
+    if (m_dir != NULL && m_dir->info < menor_no->info)
+        menor_no = m_dir;
+
+    return menor_no;
 }
