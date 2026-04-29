@@ -88,3 +88,50 @@ int *igual(TAB *a1, TAB *a2)
     //  "AND" para verificar se ambos os lados sao iguais
     return igual(a1->dir, a2->dir) && igual(a1->esq, a2->esq);
 }
+
+/* Escreva uma função em C que, dada uma árvore binária qualquer, retire todos os
+elementos pares da árvore original. A função deve ter o seguinte protótipo: TAB*
+retira_pares (TAB* arv) */
+TAB *retira_pares(TAB *arv)
+{
+    if (arv == NULL)
+        return NULL;
+
+    retira_pares(arv->dir);
+    retira_pares(arv->esq);
+
+    if (arv->info % 2 == 0)
+    {
+        // CASO A: NENHUM FILHO (NO FOLHA)
+        if (arv->dir == NULL && arv->esq == NULL)
+            free(arv);
+        // CASO B1: SO UM FILHO NA ESQUEDA
+        else if (arv->dir == NULL)
+        {
+            TAB *temp = arv->esq;
+            free(arv);
+            return temp;
+        }
+        // CASO B2: SO UM FILHO NA DIREITA
+        else if (arv->esq == NULL)
+        {
+            TAB *temp = arv->dir;
+            free(arv);
+            return temp;
+        }
+        // CASO C: TEM OS DOIS FILHOS (o da esquerda vira raiz e o da direita entra no espaco vazio p direita)
+        else
+        {
+            TAB *nova_raiz = arv->esq; // o filho da esquerda vira a raiz
+            TAB *aux = nova_raiz;      // ponteiro para andar pela nova raiz
+            // descer ate o galho mais a direita possivel da nova raiz
+            while (aux->dir != NULL)
+                aux = aux->dir;
+            // aloca o filho da direita (que perdeu o no raiz) nesse local encontrado
+            aux->dir = arv->dir;
+            free(arv);
+            return nova_raiz;
+        }
+    }
+    return arv;
+}
