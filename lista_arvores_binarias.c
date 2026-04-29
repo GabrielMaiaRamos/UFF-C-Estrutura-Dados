@@ -185,3 +185,19 @@ int nf(TAB *a)
 
     return nf(a->dir) + nf(a->esq);
 }
+
+/*10. Escreva uma função em C para testar se uma árvore é zigue-zague, isto é, se todos
+os nós internos possuem exatamente uma sub-árvore vazia: int zz(TAB *a);*/
+int zz(TAB *a)
+{
+    if (a == NULL) // se for null, respeita a condicao
+        return 1;
+    if (a->dir == NULL && a->esq == NULL) // se for no folha, respeita a condicao NEM PRECISA DESSA, MAS FICA MAIS ORGANIZADO
+        return 1;
+    if (a->esq == NULL) // se tiver somente caminho pra direita, segue
+        return zz(a->dir);
+    if (a->dir == NULL) // se tiver somente caminho pra esquerda, segue
+        return zz(a->esq);
+
+    return 0; // se tiver caminho pra direita E esquerda,
+}
