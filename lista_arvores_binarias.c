@@ -174,3 +174,14 @@ int ni(TAB *a)
 
     return 1 + ni(a->dir) + ni(a->esq);
 }
+
+/*Escreva uma função em C que retorna a quantidade de nós folha: int nf(TAB*a);*/
+int nf(TAB *a)
+{
+    if (a == NULL)
+        return 0;
+    if (a->dir == NULL && a->esq == NULL)
+        return 1;
+
+    return nf(a->dir) + nf(a->esq);
+}
