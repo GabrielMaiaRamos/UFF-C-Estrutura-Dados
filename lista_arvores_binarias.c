@@ -201,3 +201,18 @@ int zz(TAB *a)
 
     return 0; // se tiver caminho pra direita E esquerda,
 }
+
+/*11. Escreva uma função em C para verificar se uma árvore é estritamente binária, isto é, se os nós dessa
+árvore possuem ou zero ou dois filhos: int estbin(TAB*a);*/
+int estbin(TAB *a)
+{
+    if (a == NULL)
+        return 1;
+
+    if (a->dir == NULL && a->esq == NULL) // no folha -> respeita
+        return 1;
+    if (a->dir != NULL && a->esq != NULL) // dois filhos -> respeita e seguimos na arvore
+        return estbin(a->dir) && estbin(a->esq);
+
+    return 0; // se for no com um filho apenas -> nao respeita
+}
