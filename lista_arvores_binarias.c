@@ -163,3 +163,14 @@ void colore(TAB *arv)
     colore(arv->dir);
     colore(arv->esq);
 }
+
+/*Escreva uma função em C que retorna a quantidade de nós internos: int ni(TAB *a)*/
+int ni(TAB *a)
+{
+    if (a == NULL) // obviamente nao conta se for null
+        return 0;
+    if (a->dir == NULL && a->esq == NULL) // nao conta se for no folha
+        return 0;
+
+    return 1 + ni(a->dir) + ni(a->esq);
+}
