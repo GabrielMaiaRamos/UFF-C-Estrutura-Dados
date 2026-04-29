@@ -3,6 +3,7 @@
 
 typedef struct ab
 {
+    int cor; // pro ex7
     int info;
     struct ab *esq, *dir;
 } TAB;
@@ -75,7 +76,7 @@ TAB *encontrar_menor(TAB *a)
 são iguais. A função retorna um se elas são iguais e zero, caso contrário. A função
 deve obedecer ao seguinte protótipo: int igual (TAB* a1, TAB* a2) */
 
-int *igual(TAB *a1, TAB *a2)
+int igual(TAB *a1, TAB *a2)
 {
     if (a1 == NULL && a2 == NULL) // se ambos forem null, eh igual (retorna 1)
         return 1;
@@ -134,4 +135,31 @@ TAB *retira_pares(TAB *arv)
         }
     }
     return arv;
+}
+
+/*Suponha que a estrutura TAB tenha um campo cor (int cor). Escreva uma função em C que, ao receber uma árvore binária “sem cor”
+e totalmente balanceada (isto é, a distância da raiz a qualquer folha da árvore é sempre a mesma), retorne esta árvore com os
+nós coloridos somente de vermelho e preto, sendo que o nó pai NUNCA pode ter a mesma cor de seus filhos. A função deve possuir
+o seguinte protótipo: void colore (TAB* arv); */
+void colore(TAB *arv)
+{
+    if (arv == NULL)
+        return;
+    int cor_filhos;
+
+    if (arv->cor != 1 && arv->cor != 2) // se for o no raiz, tem que pintar a si mesmo
+        arv->cor = 1;
+
+    if (arv->cor == 1) // se tiver a cor 1, pinta os filhos de 2
+        cor_filhos = 2;
+    else if (arv->cor == 2) // se tiver a cor 2, pinta os filhos de 1
+        cor_filhos = 1;
+
+    if (arv->dir != NULL)
+        arv->dir->cor = cor_filhos;
+    if (arv->esq != NULL)
+        arv->esq->cor = cor_filhos;
+
+    colore(arv->dir);
+    colore(arv->esq);
 }
