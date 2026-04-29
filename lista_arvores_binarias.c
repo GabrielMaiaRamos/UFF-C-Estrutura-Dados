@@ -8,7 +8,7 @@ typedef struct ab
     struct ab *esq, *dir;
 } TAB;
 
-// Escreva uma função em C que faz a cópia de uma árvore
+//[1] Escreva uma função em C que faz a cópia de uma árvore
 TAB *copia(TAB *a)
 {
     if (a == NULL) // se for null, acabou essa linha
@@ -21,7 +21,7 @@ TAB *copia(TAB *a)
     return novo;
 }
 
-/*Escreva uma função em C que faz o espelho de uma árvore (o que está a esquerda
+/*[2] Escreva uma função em C que faz o espelho de uma árvore (o que está a esquerda
 na árvore original, estará a direita no espelho, e vice-versa) */
 TAB *espelho(TAB *a)
 {
@@ -36,7 +36,7 @@ TAB *espelho(TAB *a)
     espelho(a->esq);
 }
 
-// Escreva uma função em C que retorna o maior elemento da árvore
+//[3] Escreva uma função em C que retorna o maior elemento da árvore
 TAB *encontrar_maior(TAB *a)
 {
     if (a == NULL)
@@ -55,7 +55,7 @@ TAB *encontrar_maior(TAB *a)
     return maior_no;
 }
 
-// Escreva uma função em C que retorna o menor elemento da árvore
+//[4] Escreva uma função em C que retorna o menor elemento da árvore
 TAB *encontrar_menor(TAB *a)
 {
     if (a == NULL)
@@ -72,7 +72,7 @@ TAB *encontrar_menor(TAB *a)
     return menor_no;
 }
 
-/* Escreva uma função em C que, dadas duas árvores deste tipo, testa se estas árvores
+/*[5] Escreva uma função em C que, dadas duas árvores deste tipo, testa se estas árvores
 são iguais. A função retorna um se elas são iguais e zero, caso contrário. A função
 deve obedecer ao seguinte protótipo: int igual (TAB* a1, TAB* a2) */
 
@@ -90,7 +90,7 @@ int igual(TAB *a1, TAB *a2)
     return igual(a1->dir, a2->dir) && igual(a1->esq, a2->esq);
 }
 
-/* Escreva uma função em C que, dada uma árvore binária qualquer, retire todos os
+/*[6] Escreva uma função em C que, dada uma árvore binária qualquer, retire todos os
 elementos pares da árvore original. A função deve ter o seguinte protótipo: TAB*
 retira_pares (TAB* arv) */
 TAB *retira_pares(TAB *arv)
@@ -137,7 +137,7 @@ TAB *retira_pares(TAB *arv)
     return arv;
 }
 
-/*Suponha que a estrutura TAB tenha um campo cor (int cor). Escreva uma função em C que, ao receber uma árvore binária “sem cor”
+/*[7] Suponha que a estrutura TAB tenha um campo cor (int cor). Escreva uma função em C que, ao receber uma árvore binária “sem cor”
 e totalmente balanceada (isto é, a distância da raiz a qualquer folha da árvore é sempre a mesma), retorne esta árvore com os
 nós coloridos somente de vermelho e preto, sendo que o nó pai NUNCA pode ter a mesma cor de seus filhos. A função deve possuir
 o seguinte protótipo: void colore (TAB* arv); */
@@ -164,7 +164,7 @@ void colore(TAB *arv)
     colore(arv->esq);
 }
 
-/*Escreva uma função em C que retorna a quantidade de nós internos: int ni(TAB *a)*/
+/*[8] Escreva uma função em C que retorna a quantidade de nós internos: int ni(TAB *a)*/
 int ni(TAB *a)
 {
     if (a == NULL) // obviamente nao conta se for null
@@ -175,7 +175,7 @@ int ni(TAB *a)
     return 1 + ni(a->dir) + ni(a->esq);
 }
 
-/*Escreva uma função em C que retorna a quantidade de nós folha: int nf(TAB*a);*/
+/*[9] Escreva uma função em C que retorna a quantidade de nós folha: int nf(TAB*a);*/
 int nf(TAB *a)
 {
     if (a == NULL)
@@ -186,7 +186,7 @@ int nf(TAB *a)
     return nf(a->dir) + nf(a->esq);
 }
 
-/*10. Escreva uma função em C para testar se uma árvore é zigue-zague, isto é, se todos
+/*[10] Escreva uma função em C para testar se uma árvore é zigue-zague, isto é, se todos
 os nós internos possuem exatamente uma sub-árvore vazia: int zz(TAB *a);*/
 int zz(TAB *a)
 {
@@ -202,7 +202,7 @@ int zz(TAB *a)
     return 0; // se tiver caminho pra direita E esquerda,
 }
 
-/*11. Escreva uma função em C para verificar se uma árvore é estritamente binária, isto é, se os nós dessa
+/*[11] Escreva uma função em C para verificar se uma árvore é estritamente binária, isto é, se os nós dessa
 árvore possuem ou zero ou dois filhos: int estbin(TAB*a);*/
 int estbin(TAB *a)
 {
@@ -215,4 +215,66 @@ int estbin(TAB *a)
         return estbin(a->dir) && estbin(a->esq);
 
     return 0; // se for no com um filho apenas -> nao respeita
+}
+
+/*[12] Escreva uma função em C para testar se duas árvores possuem os mesmos nós: int mesmos_nos(TAB *a1, TAB *a2).*/
+
+int conta_nos(TAB *a)
+{
+    if (a == NULL)
+        return 0;
+    return 1 + conta_nos(a->dir) + conta_nos(a->esq);
+}
+
+void preenche_vetor(TAB *a, int *vet, int *pos)
+{
+    if (a != NULL)
+    {
+        vet[*pos] = a->info;              // coloca o valor do no na posicao pos do vetor
+        (*pos)++;                         // passa pra proxima posicao do vetor
+        preenche_vetor(a->esq, vet, pos); // preenche com todos da esquerda
+        preenche_vetor(a->dir, vet, pos); // preenche com todos da direita
+    }
+}
+
+int compara(const void *a, const void *b) // auxiliar do qsort obrigatoria
+{
+    return (*(int *)a - *(int *)b);
+}
+
+int mesmos_nos(TAB *a1, TAB *a2)
+{
+    if (a1 == NULL && a2 == NULL) // se ambas sao nulas -> sao iguais
+        return 1;
+    if (a1 == NULL || a2 == NULL) // se apenas uma eh nula -> sao diferentes
+        return 0;
+
+    int n1 = conta_nos(a1);
+    int n2 = conta_nos(a2);
+
+    if (n1 != n2) // se tem quantidade de nos diferentes -> sao diferentes
+        return 0;
+
+    int *v1 = malloc(n1 * sizeof(int)); // aloca memoria de acordo com a quant de nos
+    int *v2 = malloc(n2 * sizeof(int));
+
+    int pos1 = 0, pos2 = 0;
+    preenche_vetor(a1, v1, &pos1); // preenche os vetores com os nos
+    preenche_vetor(a2, v2, &pos2);
+
+    qsort(v1, n1, sizeof(int), compara); // usa o quicksort nativo do C
+    qsort(v2, n2, sizeof(int), compara);
+
+    int possui_mesmos_nos = 1; // verifica se os vetores sao iguais
+    for (int i = 0; i < n1; i++)
+        if (v1[i] != v2[i])
+        {
+            possui_mesmos_nos = 0;
+            break;
+        }
+
+    free(v1);
+    free(v2);
+
+    return possui_mesmos_nos;
 }
