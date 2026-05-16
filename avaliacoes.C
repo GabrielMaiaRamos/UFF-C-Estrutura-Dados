@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 
 typedef struct sNoA
 {
@@ -23,6 +24,20 @@ typedef struct grafo
     TVizinho *prim_vizinho;
     struct grafo *prox;
 } TGrafo;
+
+#define TAM_NOME 100
+
+typedef struct Cliente
+{
+    int cod_cliente;
+    char nome[TAM_NOME];
+} TCliente;
+
+typedef struct vetor
+{
+    TCliente *cli;
+    int congelado;
+} TVet;
 
 int ehZigueZague(TNoA *raiz)
 {
@@ -70,3 +85,10 @@ int main()
     getchar();
     getchar();
 };
+
+int selecao_substituicao(char *nome_arquivo_entrada, int tam_memoria)
+{
+    FILE *arq = fopen(nome_arquivo_entrada, "r");
+    if (arq == NULL)
+        return 0; // se nao existir, retorna 0
+}
