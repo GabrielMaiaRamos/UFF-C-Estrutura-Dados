@@ -199,14 +199,28 @@ int insere(int cod_cli, char *nome_cli, char *nome_arquivo_hash, char *nome_arqu
 
     // pega o compartimento na tabela hash (de acordo com a funcoa h(x))
     fseek(hash, mod * tamanho_compartimento(), SEEK_SET);
-    Tcompartimento *comp = le_compartimento(hash);
+    TCompartimento *comp = le_compartimento(hash);
 
     int posicao = comp->prox; // inicio da lista de clientes desse compartimento
 
     // se a lista estiver VAZIA
     if (posicao == -1)
     {
+        // achar a posicao final do arquivo de DADOS
+        fseek(dados, 0, SEEK_END);
+        int novo_endereco = ftell(dados) / tamanho_cliente();
+
+        // ja cria e salva o cliente
+        TCliente *cli = cliente(cod_cli, nome_cli, -1, 1); // proximo = -1 e ocupado = 1
+        salva_cliente(cli, dados);
+
+        // joga na tabela hash
+        comp->prox = novo_endereco;
+        fseek(hash, mod * tamamanho_compartimento(), SEEK_SET);
+        salva_compartimento(comp, hash);
     }
+
+    return INT_MAX;
 }
 
 int main()
