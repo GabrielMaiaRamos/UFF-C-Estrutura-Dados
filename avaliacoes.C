@@ -216,8 +216,13 @@ int insere(int cod_cli, char *nome_cli, char *nome_arquivo_hash, char *nome_arqu
 
         // joga na tabela hash
         comp->prox = novo_endereco;
-        fseek(hash, mod * tamamanho_compartimento(), SEEK_SET);
+        fseek(hash, mod * tamanho_compartimento(), SEEK_SET);
         salva_compartimento(comp, hash);
+
+        free(comp);
+        fclose(hash);
+        fclose(dados);
+        return novo_endereco;
     }
 
     return INT_MAX;
