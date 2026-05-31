@@ -277,9 +277,35 @@ int insere(int cod_cli, char *nome_cli, char *nome_arquivo_hash, char *nome_arqu
             fclose(dados);
             return livre;
         }
-    }
+        // caso nao haja o livre, insere sempre no final do arquivo
+        else
+        {
+            // vai pro final do arquivo
+            fseek(dados, 0, SEEK_END);
+            // pega o total de bytes do arquivo e divide pelo tamanho dos clientes (resultando no endereco LOGICO)
+            int novo_endereco = ftell(dados) / tamanho_cliente();
 
-    return INT_MAX;
+            // cria e coloca o novo cliente no final
+            TCliente *novo_cliente = cliente(cod_cli, nome_cli, -1, 1);
+            salva_cliente(novo_cliente, dados);
+
+            // atualiza o proximo do ANTERIOR ao cliente salvo
+            fseek(dados, pre * tamanho_cliente(), SEEK_SET);
+            TCliente *pre_cliente = le_cliente(dados);
+            pre_cliente->prox = novo_endereco;
+
+            // salva nos dados
+            fseek(dados, pre * tamanho_cliente(), SEEK_SET);
+            salva_cliente(pre, dados);
+
+            // free e fecha tudo
+            free(pre_cliente);
+            free(comp);
+            fclose(hash);
+            fclose(dados);
+            return novo_endereco;
+        }
+    }
 }
 
 int main()
