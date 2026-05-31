@@ -42,6 +42,11 @@ typedef struct vetor
     int congelado;
 } TVet;
 
+typedef struct compartimento
+{
+    int prox;
+} TCompartimento;
+
 int ehZigueZague(TNoA *raiz)
 {
     if (raiz == NULL)
@@ -296,7 +301,7 @@ int insere(int cod_cli, char *nome_cli, char *nome_arquivo_hash, char *nome_arqu
 
             // salva nos dados
             fseek(dados, pre * tamanho_cliente(), SEEK_SET);
-            salva_cliente(pre, dados);
+            salva_cliente(pre_cliente, dados);
 
             // free e fecha tudo
             free(pre_cliente);
