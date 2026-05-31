@@ -31,6 +31,9 @@ typedef struct Cliente
 {
     int cod_cliente;
     char nome[TAM_NOME];
+    int ocupado;
+    int cod;
+    int prox;
 } TCliente;
 
 typedef struct vetor
@@ -223,6 +226,57 @@ int insere(int cod_cli, char *nome_cli, char *nome_arquivo_hash, char *nome_arqu
         fclose(hash);
         fclose(dados);
         return novo_endereco;
+    }
+    // caso ja possua registros, tem que percorrer
+    else
+    {
+        int pre = -1;
+        int livre = -1;
+
+        // percorrer o disco
+        while (posicao != -1)
+        {
+            fseel(dados, posicao * tamanho_cliente(), SEEK_SET);
+            TCliente *cli = le_cliente(dados);
+
+            // se a chave JA existir -> para de fazer
+            if (cli->cod == cod_cli && cli->ocupado == 1) // obs: tem que estar OCUPADO tambem
+            {
+                // free e close em tudo
+                free(cli);
+                free(comp);
+                fclose(hash);
+                fclose(dados);
+                return -1; // nao pode inserir
+            }
+            if (livre == -1 && cli->ocupado == 0) // se tiver um espaco liberado, ja anota
+                livre = posicao;
+
+            pre = posicao;
+            posicao = cli->prox;
+        }
+        // obs: se sair do while, nao ha cliente duplicado
+        // se houver um espaco LIVRE no meio da lista (entrou no if do while e mudou o valor de "livre")
+        if (livre != -1)
+        {
+            // precisa do proximo do cliente livre
+            fseek(dados, livre * tamanho_cliente(), SEEK_SET);
+            TCliente *cliente_livre = le_cliente(dados);
+
+            // agora cria a novo cliente usando o proximo do livre (mantendo o encadeamento)
+            TCliente *novo_cliente = cliente(cod_cli, nome_cli, cliente_livre->prox, 1); // ocupado = 1
+
+            // escrever no local
+            fseek(dados, livre * tamanho_cliente(), SEEK_SET);
+            salva_cliente(novo_cliente, dados);
+
+            // free e fecha tudo
+            free(cliente_livre);
+            free(comp);
+            fclose(hash);
+            fclose(dados);
+            return livre;
+        }
     }
 
     return INT_MAX;
