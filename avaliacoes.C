@@ -182,6 +182,33 @@ int selecao_substituicao(char *nome_arquivo_entrada, int tam_memoria)
     return particao; // total de particoes
 }
 
+int insere(int cod_cli, char *nome_cli, char *nome_arquivo_hash, char *nome_arquivo_dados, int m)
+{
+    FILE *hash = fopen(nome_arquivo_hash, "r+b"); // abre em escrita binaria
+    if (hash == NULL)
+        return -1;
+
+    FILE *dados = fopen(nome_arquivo_dados, "r+b");
+    if (dados == NULL)
+    {
+        fclose(hash);
+        return -1;
+    }
+
+    int mod = cod_cli % m; // funcao h(x)
+
+    // pega o compartimento na tabela hash (de acordo com a funcoa h(x))
+    fseek(hash, mod * tamanho_compartimento(), SEEK_SET);
+    Tcompartimento *comp = le_compartimento(hash);
+
+    int posicao = comp->prox; // inicio da lista de clientes desse compartimento
+
+    // se a lista estiver VAZIA
+    if (posicao == -1)
+    {
+    }
+}
+
 int main()
 {
     getchar();
