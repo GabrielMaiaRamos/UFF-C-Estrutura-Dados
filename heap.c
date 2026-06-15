@@ -32,6 +32,7 @@ void subir(int *heap, int n, int i)
         }
     }
 }
+
 void descer(int *heap, int ultimo_indice, int n, int i)
 {
     // Fica em loop até o nó achar o seu lugar correto
@@ -70,4 +71,31 @@ void descer(int *heap, int ultimo_indice, int n, int i)
             break;
         }
     }
+}
+int exclui(int *heap, int ultimo_indice, int n)
+{
+    // Se a heap já estiver vazia, não há o que excluir
+    if (ultimo_indice < 1)
+    {
+        return ultimo_indice;
+    }
+
+    // 1. Opcional: Se você quisesse saber quem foi excluído, poderia salvar:
+    // int removido = heap[1];
+
+    // 2. Pega o cara da ÚLTIMA posição e joga ele na RAIZ (posição 1)
+    heap[1] = heap[ultimo_indice];
+
+    // 3. Diminui o tamanho da heap (o último cara original foi apagado/movido)
+    ultimo_indice--;
+
+    // 4. Manda o cara que foi pro topo "descer" até arrumar a árvore
+    // Só chamamos o descer se ainda sobrar alguém na árvore!
+    if (ultimo_indice > 0)
+    {
+        descer(heap, ultimo_indice, n, 1);
+    }
+
+    // 5. Retorna o novo tamanho da heap
+    return ultimo_indice;
 }
